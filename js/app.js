@@ -21,18 +21,18 @@ var calculatePayment = function(principal, years, rate) {
     return {monthlyPayment: monthlyPayment, amortization:amortization};
 };
 
-var Header = React.createClass({
-    render: function () {
+class Header extends React.Component{
+    render(){
         return (
             <header>
                 <h1>{this.props.title}</h1>
             </header>
         );
     }
-});
+};
 
-var AmortizationChart = React.createClass({
-    render: function () {
+class AmortizationChart extends React.Component{
+    render(){
         var items = this.props.data.map(function (year, index) {
             return (
                 <tr key={index}>
@@ -64,26 +64,28 @@ var AmortizationChart = React.createClass({
             </table>
         );
     }
-});
+};
 
-var MortgageCalculator = React.createClass({
-    getInitialState: function() {
-        return {
-            principal: this.props.principal,
-            years: this.props.years,
-            rate: this.props.rate
-        };
-    },
-    principalChange: function(event) {
+class MortgageCalculator extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            principal: "",
+            years: "",
+            rate:""
+        }
+    }
+  
+    principalChange(event) {
         this.setState({principal: event.target.value});
-    },
-    yearsChange: function(event) {
+    }
+    yearsChange(event) {
         this.setState({years: event.target.value});
-    },
-    rateChange: function(event) {
+    }
+    rateChange(event) {
         this.setState({rate: event.target.value});
-    },
-    render: function () {
+    }
+    render() {
         var payment = calculatePayment(this.state.principal, this.state.years, this.state.rate);
         var monthlyPayment = payment.monthlyPayment;
         var amortization = payment.amortization;
@@ -108,10 +110,10 @@ var MortgageCalculator = React.createClass({
             </div>
         );
     }
-});
+};
 
-var App = React.createClass({
-    render: function () {
+class App extends React.Component{
+    render() {
         return (
             <div>
                 <Header title="React Mortgage Calculator"/>
@@ -119,6 +121,6 @@ var App = React.createClass({
             </div>
         );
     }
-});
+};
 
 ReactDOM.render(<App/>,  document.getElementById("app"));
