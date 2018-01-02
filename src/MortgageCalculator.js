@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { AmortizationChart } from './AmortizationChart';
+import { calculatePayment } from './appContainer';
 
 export class MortgageCalculator extends React.Component{
     constructor(props){
@@ -9,7 +10,10 @@ export class MortgageCalculator extends React.Component{
             principal: "",
             years: "",
             rate:""
-        }
+        };
+        this.principalChange = this.principalChange.bind(this);
+        this.yearsChange = this.yearsChange.bind(this);
+        this.rateChange = this.rateChange.bind(this);
     }
   
     principalChange(event) {
