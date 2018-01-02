@@ -261,6 +261,20 @@ process.umask = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = __webpack_require__(15);
+} else {
+  module.exports = __webpack_require__(16);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 
 /**
@@ -299,7 +313,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 module.exports = emptyFunction;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -395,7 +409,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -416,20 +430,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = emptyObject;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(15);
-} else {
-  module.exports = __webpack_require__(16);
-}
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -507,7 +507,7 @@ module.exports = invariant;
 
 
 
-var emptyFunction = __webpack_require__(1);
+var emptyFunction = __webpack_require__(2);
 
 /**
  * Similar to invariant but only logs a warning if the condition is not met.
@@ -684,7 +684,7 @@ module.exports = ExecutionEnvironment;
  * @typechecks
  */
 
-var emptyFunction = __webpack_require__(1);
+var emptyFunction = __webpack_require__(2);
 
 /**
  * Upstream version of event listener. Does not take into account specific
@@ -947,254 +947,28 @@ module.exports = focusNode;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(18);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _Header = __webpack_require__(27);
+
+var _MortgageCalculator = __webpack_require__(28);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var React = __webpack_require__(4);
-var ReactDOM = __webpack_require__(18);
-
-var calculatePayment = function calculatePayment(principal, years, rate) {
-    var monthlyRate = rate / 100 / 12;
-    var monthlyPayment = principal * monthlyRate / (1 - Math.pow(1 / (1 + monthlyRate), years * 12));
-    var balance = principal;
-    var amortization = [];
-    for (var y = 0; y < years; y++) {
-        var interestY = 0; //Interest payment for year y
-        var principalY = 0; //Principal payment for year y
-        for (var m = 0; m < 12; m++) {
-            var interestM = balance * monthlyRate; //Interest payment for month m
-            var principalM = monthlyPayment - interestM; //Principal payment for month m
-            interestY = interestY + interestM;
-            principalY = principalY + principalM;
-            balance = balance - principalM;
-        }
-        amortization.push({ principalY: principalY, interestY: interestY, balance: balance });
-    }
-    return { monthlyPayment: monthlyPayment, amortization: amortization };
-};
-
-var Header = function (_React$Component) {
-    _inherits(Header, _React$Component);
-
-    function Header() {
-        _classCallCheck(this, Header);
-
-        return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
-    }
-
-    _createClass(Header, [{
-        key: 'render',
-        value: function render() {
-            return React.createElement(
-                'header',
-                null,
-                React.createElement(
-                    'h1',
-                    null,
-                    this.props.title
-                )
-            );
-        }
-    }]);
-
-    return Header;
-}(React.Component);
-
-;
-
-var AmortizationChart = function (_React$Component2) {
-    _inherits(AmortizationChart, _React$Component2);
-
-    function AmortizationChart() {
-        _classCallCheck(this, AmortizationChart);
-
-        return _possibleConstructorReturn(this, (AmortizationChart.__proto__ || Object.getPrototypeOf(AmortizationChart)).apply(this, arguments));
-    }
-
-    _createClass(AmortizationChart, [{
-        key: 'render',
-        value: function render() {
-            var items = this.props.data.map(function (year, index) {
-                return React.createElement(
-                    'tr',
-                    { key: index },
-                    React.createElement(
-                        'td',
-                        null,
-                        index + 1
-                    ),
-                    React.createElement(
-                        'td',
-                        { className: 'currency principal' },
-                        Math.round(year.principalY).toLocaleString()
-                    ),
-                    React.createElement(
-                        'td',
-                        { className: 'stretch' },
-                        React.createElement(
-                            'div',
-                            { className: 'flex' },
-                            React.createElement('div', { className: 'bar principal', style: { flex: year.principalY, WebkitFlex: year.principalY } }),
-                            React.createElement('div', { className: 'bar interest', style: { flex: year.interestY, WebkitFlex: year.interestY } })
-                        )
-                    ),
-                    React.createElement(
-                        'td',
-                        { className: 'currency interest' },
-                        Math.round(year.interestY).toLocaleString()
-                    ),
-                    React.createElement(
-                        'td',
-                        { className: 'currency' },
-                        Math.round(year.balance).toLocaleString()
-                    )
-                );
-            });
-            return React.createElement(
-                'table',
-                null,
-                React.createElement(
-                    'thead',
-                    null,
-                    React.createElement(
-                        'tr',
-                        null,
-                        React.createElement(
-                            'th',
-                            null,
-                            'Year'
-                        ),
-                        React.createElement(
-                            'th',
-                            { className: 'principal' },
-                            'Principal'
-                        ),
-                        React.createElement('th', { className: 'stretch' }),
-                        React.createElement(
-                            'th',
-                            { className: 'interest' },
-                            'Interest'
-                        ),
-                        React.createElement(
-                            'th',
-                            null,
-                            'Balance'
-                        )
-                    )
-                ),
-                React.createElement(
-                    'tbody',
-                    null,
-                    items
-                )
-            );
-        }
-    }]);
-
-    return AmortizationChart;
-}(React.Component);
-
-;
-
-var MortgageCalculator = function (_React$Component3) {
-    _inherits(MortgageCalculator, _React$Component3);
-
-    function MortgageCalculator(props) {
-        _classCallCheck(this, MortgageCalculator);
-
-        var _this3 = _possibleConstructorReturn(this, (MortgageCalculator.__proto__ || Object.getPrototypeOf(MortgageCalculator)).call(this, props));
-
-        _this3.state = {
-            principal: "",
-            years: "",
-            rate: ""
-        };
-        return _this3;
-    }
-
-    _createClass(MortgageCalculator, [{
-        key: 'principalChange',
-        value: function principalChange(event) {
-            this.setState({ principal: event.target.value });
-        }
-    }, {
-        key: 'yearsChange',
-        value: function yearsChange(event) {
-            this.setState({ years: event.target.value });
-        }
-    }, {
-        key: 'rateChange',
-        value: function rateChange(event) {
-            this.setState({ rate: event.target.value });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var payment = calculatePayment(this.state.principal, this.state.years, this.state.rate);
-            var monthlyPayment = payment.monthlyPayment;
-            var amortization = payment.amortization;
-            return React.createElement(
-                'div',
-                { className: 'content' },
-                React.createElement(
-                    'div',
-                    { className: 'form' },
-                    React.createElement(
-                        'div',
-                        null,
-                        React.createElement(
-                            'label',
-                            null,
-                            'Principal:'
-                        ),
-                        React.createElement('input', { type: 'text', value: this.state.principal, onChange: this.principalChange })
-                    ),
-                    React.createElement(
-                        'div',
-                        null,
-                        React.createElement(
-                            'label',
-                            null,
-                            'Years:'
-                        ),
-                        React.createElement('input', { type: 'text', value: this.state.years, onChange: this.yearsChange })
-                    ),
-                    React.createElement(
-                        'div',
-                        null,
-                        React.createElement(
-                            'label',
-                            { htmlFor: 'rate' },
-                            'Rate:'
-                        ),
-                        React.createElement('input', { type: 'text', value: this.state.rate, onChange: this.rateChange })
-                    )
-                ),
-                React.createElement(
-                    'h2',
-                    null,
-                    'Monthly Payment: ',
-                    React.createElement(
-                        'span',
-                        { className: 'currency' },
-                        Number(monthlyPayment.toFixed(2)).toLocaleString()
-                    )
-                ),
-                React.createElement(AmortizationChart, { data: amortization })
-            );
-        }
-    }]);
-
-    return MortgageCalculator;
-}(React.Component);
-
-;
-
-var App = function (_React$Component4) {
-    _inherits(App, _React$Component4);
+var App = function (_React$Component) {
+    _inherits(App, _React$Component);
 
     function App() {
         _classCallCheck(this, App);
@@ -1205,21 +979,21 @@ var App = function (_React$Component4) {
     _createClass(App, [{
         key: 'render',
         value: function render() {
-            return React.createElement(
+            return _react2.default.createElement(
                 'div',
                 null,
-                React.createElement(Header, { title: 'React Mortgage Calculator' }),
-                React.createElement(MortgageCalculator, { principal: '200000', years: '30', rate: '5' })
+                _react2.default.createElement(_Header.Header, { title: 'React Mortgage Calculator' }),
+                _react2.default.createElement(_MortgageCalculator.MortgageCalculator, { principal: '200000', years: '30', rate: '5' })
             );
         }
     }]);
 
     return App;
-}(React.Component);
+}(_react2.default.Component);
 
 ;
 
-ReactDOM.render(React.createElement(App, null), document.getElementById("app"));
+_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById("app"));
 
 /***/ }),
 /* 15 */
@@ -1239,9 +1013,9 @@ ReactDOM.render(React.createElement(App, null), document.getElementById("app"));
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var m = __webpack_require__(2),
-    n = __webpack_require__(3),
-    p = __webpack_require__(1),
+var m = __webpack_require__(3),
+    n = __webpack_require__(4),
+    p = __webpack_require__(2),
     q = "function" === typeof Symbol && Symbol["for"],
     r = q ? Symbol["for"]("react.element") : 60103,
     t = q ? Symbol["for"]("react.call") : 60104,
@@ -1372,11 +1146,11 @@ if (process.env.NODE_ENV !== "production") {
   (function () {
     'use strict';
 
-    var _assign = __webpack_require__(2);
-    var emptyObject = __webpack_require__(3);
+    var _assign = __webpack_require__(3);
+    var emptyObject = __webpack_require__(4);
     var invariant = __webpack_require__(5);
     var warning = __webpack_require__(6);
-    var emptyFunction = __webpack_require__(1);
+    var emptyFunction = __webpack_require__(2);
     var checkPropTypes = __webpack_require__(7);
 
     // TODO: this is special because it gets imported during build.
@@ -2791,16 +2565,16 @@ if (process.env.NODE_ENV === 'production') {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var aa = __webpack_require__(4),
+var aa = __webpack_require__(1),
     l = __webpack_require__(8),
-    B = __webpack_require__(2),
-    C = __webpack_require__(1),
+    B = __webpack_require__(3),
+    C = __webpack_require__(2),
     ba = __webpack_require__(9),
     da = __webpack_require__(10),
     ea = __webpack_require__(11),
     fa = __webpack_require__(12),
     ia = __webpack_require__(13),
-    D = __webpack_require__(3);
+    D = __webpack_require__(4);
 function E(a) {
   for (var b = arguments.length - 1, c = "Minified React error #" + a + "; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d" + a, d = 0; d < b; d++) {
     c += "\x26args[]\x3d" + encodeURIComponent(arguments[d + 1]);
@@ -4838,7 +4612,7 @@ module.exports = isNode;
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- */var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};if(process.env.NODE_ENV!=="production"){(function(){'use strict';var React=__webpack_require__(4);var invariant=__webpack_require__(5);var warning=__webpack_require__(6);var ExecutionEnvironment=__webpack_require__(8);var _assign=__webpack_require__(2);var emptyFunction=__webpack_require__(1);var EventListener=__webpack_require__(9);var getActiveElement=__webpack_require__(10);var shallowEqual=__webpack_require__(11);var containsNode=__webpack_require__(12);var focusNode=__webpack_require__(13);var emptyObject=__webpack_require__(3);var checkPropTypes=__webpack_require__(7);var hyphenateStyleName=__webpack_require__(23);var camelizeStyleName=__webpack_require__(25);/**
+ */var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};if(process.env.NODE_ENV!=="production"){(function(){'use strict';var React=__webpack_require__(1);var invariant=__webpack_require__(5);var warning=__webpack_require__(6);var ExecutionEnvironment=__webpack_require__(8);var _assign=__webpack_require__(3);var emptyFunction=__webpack_require__(2);var EventListener=__webpack_require__(9);var getActiveElement=__webpack_require__(10);var shallowEqual=__webpack_require__(11);var containsNode=__webpack_require__(12);var focusNode=__webpack_require__(13);var emptyObject=__webpack_require__(4);var checkPropTypes=__webpack_require__(7);var hyphenateStyleName=__webpack_require__(23);var camelizeStyleName=__webpack_require__(25);/**
  * WARNING: DO NOT manually require this module.
  * This is a replacement for `invariant(...)` used by the error code system
  * and will _only_ be required by the corresponding babel pass.
@@ -7965,6 +7739,338 @@ function camelize(string) {
 }
 
 module.exports = camelize;
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Header = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Header = exports.Header = function (_React$Component) {
+    _inherits(Header, _React$Component);
+
+    function Header() {
+        _classCallCheck(this, Header);
+
+        return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
+    }
+
+    _createClass(Header, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'header',
+                null,
+                _react2.default.createElement(
+                    'h1',
+                    null,
+                    this.props.title
+                )
+            );
+        }
+    }]);
+
+    return Header;
+}(_react2.default.Component);
+
+;
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.MortgageCalculator = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _AmortizationChart = __webpack_require__(29);
+
+var _appContainer = __webpack_require__(30);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MortgageCalculator = exports.MortgageCalculator = function (_React$Component) {
+    _inherits(MortgageCalculator, _React$Component);
+
+    function MortgageCalculator(props) {
+        _classCallCheck(this, MortgageCalculator);
+
+        var _this = _possibleConstructorReturn(this, (MortgageCalculator.__proto__ || Object.getPrototypeOf(MortgageCalculator)).call(this, props));
+
+        _this.state = {
+            principal: "",
+            years: "",
+            rate: ""
+        };
+        _this.principalChange = _this.principalChange.bind(_this);
+        _this.yearsChange = _this.yearsChange.bind(_this);
+        _this.rateChange = _this.rateChange.bind(_this);
+        return _this;
+    }
+
+    _createClass(MortgageCalculator, [{
+        key: 'principalChange',
+        value: function principalChange(event) {
+            this.setState({ principal: event.target.value });
+        }
+    }, {
+        key: 'yearsChange',
+        value: function yearsChange(event) {
+            this.setState({ years: event.target.value });
+        }
+    }, {
+        key: 'rateChange',
+        value: function rateChange(event) {
+            this.setState({ rate: event.target.value });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var payment = (0, _appContainer.calculatePayment)(this.state.principal, this.state.years, this.state.rate);
+            var monthlyPayment = payment.monthlyPayment;
+            var amortization = payment.amortization;
+            return _react2.default.createElement(
+                'div',
+                { className: 'content' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'form' },
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            'Principal:'
+                        ),
+                        _react2.default.createElement('input', { type: 'text', value: this.state.principal, onChange: this.principalChange })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            'Years:'
+                        ),
+                        _react2.default.createElement('input', { type: 'text', value: this.state.years, onChange: this.yearsChange })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'label',
+                            { htmlFor: 'rate' },
+                            'Rate:'
+                        ),
+                        _react2.default.createElement('input', { type: 'text', value: this.state.rate, onChange: this.rateChange })
+                    )
+                ),
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    'Monthly Payment: ',
+                    _react2.default.createElement(
+                        'span',
+                        { className: 'currency' },
+                        Number(monthlyPayment.toFixed(2)).toLocaleString()
+                    )
+                ),
+                _react2.default.createElement(_AmortizationChart.AmortizationChart, { data: amortization })
+            );
+        }
+    }]);
+
+    return MortgageCalculator;
+}(_react2.default.Component);
+
+;
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.AmortizationChart = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AmortizationChart = exports.AmortizationChart = function (_React$Component) {
+    _inherits(AmortizationChart, _React$Component);
+
+    function AmortizationChart() {
+        _classCallCheck(this, AmortizationChart);
+
+        return _possibleConstructorReturn(this, (AmortizationChart.__proto__ || Object.getPrototypeOf(AmortizationChart)).apply(this, arguments));
+    }
+
+    _createClass(AmortizationChart, [{
+        key: "render",
+        value: function render() {
+            var items = this.props.data.map(function (year, index) {
+                return _react2.default.createElement(
+                    "tr",
+                    { key: index },
+                    _react2.default.createElement(
+                        "td",
+                        null,
+                        index + 1
+                    ),
+                    _react2.default.createElement(
+                        "td",
+                        { className: "currency principal" },
+                        Math.round(year.principalY).toLocaleString()
+                    ),
+                    _react2.default.createElement(
+                        "td",
+                        { className: "stretch" },
+                        _react2.default.createElement(
+                            "div",
+                            { className: "flex" },
+                            _react2.default.createElement("div", { className: "bar principal", style: { flex: year.principalY, WebkitFlex: year.principalY } }),
+                            _react2.default.createElement("div", { className: "bar interest", style: { flex: year.interestY, WebkitFlex: year.interestY } })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        "td",
+                        { className: "currency interest" },
+                        Math.round(year.interestY).toLocaleString()
+                    ),
+                    _react2.default.createElement(
+                        "td",
+                        { className: "currency" },
+                        Math.round(year.balance).toLocaleString()
+                    )
+                );
+            });
+            return _react2.default.createElement(
+                "table",
+                null,
+                _react2.default.createElement(
+                    "thead",
+                    null,
+                    _react2.default.createElement(
+                        "tr",
+                        null,
+                        _react2.default.createElement(
+                            "th",
+                            null,
+                            "Year"
+                        ),
+                        _react2.default.createElement(
+                            "th",
+                            { className: "principal" },
+                            "Principal"
+                        ),
+                        _react2.default.createElement("th", { className: "stretch" }),
+                        _react2.default.createElement(
+                            "th",
+                            { className: "interest" },
+                            "Interest"
+                        ),
+                        _react2.default.createElement(
+                            "th",
+                            null,
+                            "Balance"
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    "tbody",
+                    null,
+                    items
+                )
+            );
+        }
+    }]);
+
+    return AmortizationChart;
+}(_react2.default.Component);
+
+;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var calculatePayment = exports.calculatePayment = function calculatePayment(principal, years, rate) {
+    var monthlyRate = rate / 100 / 12;
+    var monthlyPayment = principal * monthlyRate / (1 - Math.pow(1 / (1 + monthlyRate), years * 12));
+    var balance = principal;
+    var amortization = [];
+    for (var y = 0; y < years; y++) {
+        var interestY = 0; //Interest payment for year y
+        var principalY = 0; //Principal payment for year y
+        for (var m = 0; m < 12; m++) {
+            var interestM = balance * monthlyRate; //Interest payment for month m
+            var principalM = monthlyPayment - interestM; //Principal payment for month m
+            interestY = interestY + interestM;
+            principalY = principalY + principalM;
+            balance = balance - principalM;
+        }
+        amortization.push({ principalY: principalY, interestY: interestY, balance: balance });
+    }
+    return { monthlyPayment: monthlyPayment, amortization: amortization };
+};
 
 /***/ })
 /******/ ]);

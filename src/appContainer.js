@@ -1,5 +1,5 @@
 
-var calculatePayment = function(principal, years, rate) {
+export let calculatePayment = function(principal, years, rate) {
     var monthlyRate = rate / 100 / 12;
     var monthlyPayment = principal * monthlyRate / (1 - (Math.pow(1/(1 + monthlyRate), years * 12)));
     var balance = principal;
